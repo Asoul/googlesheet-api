@@ -1,6 +1,10 @@
 # googlesheet-api
 A simple example for retrieve google sheet via Vanillajs
 
+## Demo
+
+[Demo Page](http://asoul.github.io/googlesheet-api/)
+
 ## Usage
 
 1. Create a Google Sheet
@@ -22,6 +26,8 @@ A simple example for retrieve google sheet via Vanillajs
 - [Publish Sheet](https://docs.google.com/spreadsheets/d/1Q9zlHuTw9Bvzu6DJNQt4BgJqMmSUjLHbYmFv63koeJg/pubhtml)
 
 - [JSON Response](https://spreadsheets.google.com/feeds/list/1Q9zlHuTw9Bvzu6DJNQt4BgJqMmSUjLHbYmFv63koeJg/od6/public/values?alt=json)
+
+- [XML Response](https://spreadsheets.google.com/feeds/list/1Q9zlHuTw9Bvzu6DJNQt4BgJqMmSUjLHbYmFv63koeJg/od6/public/values)
 
 ## Syntax
 
