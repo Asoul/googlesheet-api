@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv='Content-type' content='text/html; charset=utf-8'>
+    <title>Google Sheet Example</title>
+    <style>
+    table, th , td  {
+      border: 1px solid grey;
+      border-collapse: collapse;
+      padding: 5px;
+    }
+    table tr:nth-child(odd) {
+      background-color: #f1f1f1;
+    }
+    table tr:nth-child(even) {
+      background-color: #ffffff;
+    }
+    </style>
+  </head>
+  <body>
+    <div id='container'>
+      <h1>Google Sheet Example</h1>
+      <hr />
+      <h2 id='workSheetName'></h2>
+      <h2 id='author'></h2>
+      <table></table>
+      <hr />
+      <ul>
+        <li><a href="https://docs.google.com/spreadsheets/d/1Q9zlHuTw9Bvzu6DJNQt4BgJqMmSUjLHbYmFv63koeJg" target="_blank">Original Google Sheet</a></li>
+        <li><a href="https://docs.google.com/spreadsheets/d/1Q9zlHuTw9Bvzu6DJNQt4BgJqMmSUjLHbYmFv63koeJg/pubhtml" target="_blank">Published Google Sheet</a></li>
+      </ul>
+    </div>
+    <script>
+      function fetchJSONFile (path, callback) {
+
+        var httpRequest = new XMLHttpRequest()
+        httpRequest.onreadystatechange = function () {
+
+          if (httpRequest.readyState === 4) {
+            if (httpRequest.status === 200) {
+
+              var data = JSON.parse(httpRequest.responseText)
+              if (callback) callback(data)
+            }
+          }
+        }
+        httpRequest.open('GET', path)
+        httpRequest.send()
+      }
+
+      // use the api from google
+      var key = '1Q9zlHuTw9Bvzu6DJNQt4BgJqMmSUjLHbYmFv63koeJg'
+      var a
+      fetchJSONFile (('https://spreadsheets.google.com/feeds/list/' + key + 
+        '/od6/public/values?alt=json'), function (data) {
+
+          var table  = document.getElementsByTagName('table')[0]
+          
+          document.getElementById('workSheetName').innerHTML = (
+            'WorkSheet: ' + data.feed.title.$t
+          )
+
+          document.getElementById('author').innerHTML = (
+            'Author: ' + data.feed.author[0].name.$t
+          )
+
+          // header
+          var tr = table.createTHead().insertRow()
+          for (var colName in data.feed.entry[0]) {
+            if (colName.startsWith('gsx$')) {// google sheet column suffix
+              var td = tr.insertCell()
+              td.appendChild(document.createTextNode(colName.substr(4)))
+            }
+          }
+
+          // tbody
+          var numOfRow = data.feed.entry.length
+          for (var rowIdx = 0; rowIdx < numOfRow; rowIdx++) {
+
+            var tr = table.insertRow()
+            var row = data.feed.entry[rowIdx]
+
+            for (var colName in row) {
+              if (colName.startsWith('gsx$')) {// google sheet column suffix
+
+                var td = tr.insertCell()
+                td.appendChild(document.createTextNode(row[colName].$t))
+              }
+            }
+          }
+      })
+    </script>
+  </body>
+</html>
